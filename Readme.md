@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов»
 
-* Студент: [Анатолий Долгов](https://up.htmlacademy.ru/nodejs-api/7/user/150174).
-* Наставник: `Неизвестно`.
+- Студент: [Анатолий Долгов](https://up.htmlacademy.ru/nodejs-api/7/user/150174).
+- Наставник: [Владислав Поклонский](https://github.com/Paklosha).
 
 ---
 
