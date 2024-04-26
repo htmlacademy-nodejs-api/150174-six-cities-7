@@ -11,3 +11,7 @@ plugins:
 extends:
   - "plugin:@typescript-eslint/recommended"
   - "htmlacademy/node"
+rules:
+  prefer-node-protocol:
+    - error
+    - always
