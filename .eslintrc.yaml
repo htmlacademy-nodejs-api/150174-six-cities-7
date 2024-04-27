@@ -8,6 +8,10 @@ parserOptions:
   sourceType: module
 plugins:
   - "@typescript-eslint"
+  - "unicorn"
 extends:
   - "plugin:@typescript-eslint/recommended"
   - "htmlacademy/node"
+rules:
+  unicorn/prefer-node-protocol:
+    - error
