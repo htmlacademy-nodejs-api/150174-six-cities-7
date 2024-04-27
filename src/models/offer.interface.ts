@@ -1,26 +1,26 @@
-import { User } from "./user.interface.js";
+import { User } from './user.interface.js';
 
 const City = {
-  Paris: "Paris",
-  Amsterdam: "Amsterdam",
-  Cologne: "Cologne",
-  Brussels: "Brussels",
-  Hamburg: "Hamburg",
-  Dusseldorf: "Dusseldorf",
+  Paris: 'Paris',
+  Amsterdam: 'Amsterdam',
+  Cologne: 'Cologne',
+  Brussels: 'Brussels',
+  Hamburg: 'Hamburg',
+  Dusseldorf: 'Dusseldorf',
 } as const;
 
 type City = keyof typeof City;
 
-type Housing = "apartment" | "house" | "room" | "hotel";
+type Housing = 'apartment' | 'house' | 'room' | 'hotel';
 
 type Feature =
-  | "Breakfast"
-  | "Air conditioning"
-  | "Laptop friendly workspace"
-  | "Baby seat"
-  | "Washer"
-  | "Towels"
-  | "Fridge";
+  | 'Breakfast'
+  | 'Air conditioning'
+  | 'Laptop friendly workspace'
+  | 'Baby seat'
+  | 'Washer'
+  | 'Towels'
+  | 'Fridge';
 
 type Coordinates = {
   lat: number;

@@ -1,4 +1,4 @@
-type UserType = "plain" | "pro";
+type UserType = 'plain' | 'pro';
 
 interface User {
   name: string;

@@ -4,5 +4,5 @@ export type {
   Coordinates,
   Feature,
   Housing,
-} from "./offer.interface.js";
-export type { User, UserType } from "./user.interface.js";
+} from './offer.interface.js';
+export type { User, UserType } from './user.interface.js';
