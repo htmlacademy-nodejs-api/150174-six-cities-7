@@ -10,6 +10,9 @@ import {
   UserType,
 } from '../models/index.js';
 
+const DECIMAL_RADIX = 10;
+const STRING_BOOLEANS = ['true', 'false'];
+
 export class TSVFileReader implements FileReader {
   private rawData = '';
 
@@ -74,7 +77,7 @@ export class TSVFileReader implements FileReader {
         authorEmail,
         avatarUrl,
         password,
-        userType as UserType
+        userType as UserType,
       ),
       commentsAmount:
         Number(commentsAmount) && this.parseInteger(commentsAmount),
@@ -90,7 +93,7 @@ export class TSVFileReader implements FileReader {
   }
 
   private parseInteger(string: string): number {
-    return Number.parseInt(string, 10);
+    return Number.parseInt(string, DECIMAL_RADIX);
   }
 
   private parseFloat(string: string): number {
@@ -98,7 +101,11 @@ export class TSVFileReader implements FileReader {
   }
 
   private parseBoolean(string: string): boolean {
-    return string === 'true';
+    if (!STRING_BOOLEANS.includes(string)) {
+      throw new Error(`Invalid boolean value: ${string}`);
+    }
+
+    return string === STRING_BOOLEANS[0];
   }
 
   private parseUser(
@@ -106,7 +113,7 @@ export class TSVFileReader implements FileReader {
     email: User['email'],
     avatarUrl: User['avatarUrl'],
     password: User['password'],
-    type: User['type']
+    type: User['type'],
   ): User {
     return { name, email, avatarUrl, password, type };
   }
