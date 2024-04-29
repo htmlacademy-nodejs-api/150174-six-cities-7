@@ -1,5 +1,4 @@
-import { readFileSync } from 'node:fs';
-
+import { createReadStream } from 'node:fs';
 import { FileReader } from './file-reader.interface.js';
 import {
   City,
@@ -8,20 +7,18 @@ import {
   Offer,
   User,
   UserType,
-} from '../models/index.js';
+} from '../../models/index.js';
+import EventEmitter from 'node:events';
 
 const DECIMAL_RADIX = 10;
 const STRING_BOOLEANS = ['true', 'false'];
 
-export class TSVFileReader implements FileReader {
+export class TSVFileReader extends EventEmitter implements FileReader {
   private rawData = '';
+  private CHUNK_SIZE = 16384; // 16KB
 
-  constructor(private readonly filename: string) {}
-
-  private validateRawData(): void {
-    if (!this.rawData) {
-      throw new Error('File was not read');
-    }
+  constructor(private readonly filename: string) {
+    super();
   }
 
   private parseRawDataToOffers(): Offer[] {
@@ -118,12 +115,38 @@ export class TSVFileReader implements FileReader {
     return { name, email, avatarUrl, password, type };
   }
 
-  public read(): void {
-    this.rawData = readFileSync(this.filename, { encoding: 'utf-8' });
+  public async read(): Promise<void> {
+    const readStream = createReadStream(this.filename, {
+      highWaterMark: this.CHUNK_SIZE,
+      encoding: 'utf-8',
+    });
+
+    let data = '';
+    let lineBreakPosition = -1;
+    let linesCount = 0;
+
+    readStream.on('readable', () => {
+      let chunk = readStream.read(this.CHUNK_SIZE);
+      while (null !== chunk) {
+        data += chunk;
+        const newlineBreakPosition = data.lastIndexOf('\n');
+        if (newlineBreakPosition !== lineBreakPosition) {
+          const line = data.slice(lineBreakPosition + 1, newlineBreakPosition);
+          const offer = this.parseLineToOffer(line);
+          linesCount++;
+          lineBreakPosition = newlineBreakPosition;
+          this.emit('line', offer);
+        }
+        chunk = readStream.read(this.CHUNK_SIZE);
+      }
+    });
+
+    readStream.once('end', () => {
+      this.emit('end', linesCount);
+    });
   }
 
   public toArray(): Offer[] {
-    this.validateRawData();
     return this.parseRawDataToOffers();
   }
 }
