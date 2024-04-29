@@ -15,7 +15,7 @@ const STRING_BOOLEANS = ['true', 'false'];
 
 export class TSVFileReader extends EventEmitter implements FileReader {
   private rawData = '';
-  private CHUNK_SIZE = 16384; // 16KB
+  private CHUNK_SIZE = 16; // 16KB
 
   constructor(private readonly filename: string) {
     super();
@@ -130,12 +130,18 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       while (null !== chunk) {
         data += chunk;
         const newlineBreakPosition = data.lastIndexOf('\n');
+
         if (newlineBreakPosition !== lineBreakPosition) {
-          const line = data.slice(lineBreakPosition + 1, newlineBreakPosition);
-          const offer = this.parseLineToOffer(line);
-          linesCount++;
-          lineBreakPosition = newlineBreakPosition;
-          this.emit('line', offer);
+          const line = data
+            .slice(lineBreakPosition + 1, newlineBreakPosition)
+            .trim();
+
+          if (line) {
+            const offer = this.parseLineToOffer(line);
+            linesCount++;
+            lineBreakPosition = newlineBreakPosition;
+            this.emit('line', offer);
+          }
         }
         chunk = readStream.read(this.CHUNK_SIZE);
       }
