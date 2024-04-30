@@ -14,18 +14,10 @@ const DECIMAL_RADIX = 10;
 const STRING_BOOLEANS = ['true', 'false'];
 
 export class TSVFileReader extends EventEmitter implements FileReader {
-  private rawData = '';
-  private CHUNK_SIZE = 16; // 16KB
+  private CHUNK_SIZE = 16384; // 16KB
 
   constructor(private readonly filename: string) {
     super();
-  }
-
-  private parseRawDataToOffers(): Offer[] {
-    return this.rawData
-      .split('\n')
-      .filter((row) => row.trim().length > 0)
-      .map((line) => this.parseLineToOffer(line));
   }
 
   private parseLineToOffer(line: string): Offer {
@@ -150,9 +142,5 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     readStream.once('end', () => {
       this.emit('end', linesCount);
     });
-  }
-
-  public toArray(): Offer[] {
-    return this.parseRawDataToOffers();
   }
 }

@@ -32,6 +32,19 @@
       "james.anderson@example.com",
       "sophia.martinez@example.com"
     ],
+    "passwords": [
+      "p@ssw0rd1",
+      "s3cur3P@ss",
+      "12345abcde",
+      "qwerty123",
+      "pass123word",
+      "letmein123",
+      "password123",
+      "welcome123",
+      "changeme123",
+      "iloveyou123"
+    ],
+
     "cities": [
       "Paris",
       "Amsterdam",
