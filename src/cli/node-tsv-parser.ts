@@ -27,7 +27,6 @@ program
   .action((pathname) => {
     try {
       const reader = new TSVFileReader(pathname);
-      reader.read();
 
       reader.on('line', (offer) => {
         console.log(chalk.green(JSON.stringify(offer)));
@@ -37,6 +36,8 @@ program
           chalk.bold(`Reading successful, total lines red: ${linesCount}`),
         );
       });
+
+      reader.read();
     } catch (err) {
       console.log(chalk.red(`Error reading file: ${err}`));
       throw err;
@@ -62,8 +63,8 @@ program
       }
       console.log(chalk.green('Generation successful'));
     } catch (err) {
-      // console.log(chalk.red(`Error writing file: ${err}`));
-      // throw err;
+      console.log(chalk.red(`Error writing file: ${err}`));
+      throw err;
     }
   });
 
