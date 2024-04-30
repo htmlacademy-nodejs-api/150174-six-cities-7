@@ -33,7 +33,7 @@ program
       });
       reader.on('end', (linesCount) => {
         console.log(
-          chalk.bold(`Reading successful, total lines red: ${linesCount}`),
+          chalk.bold(`Reading successful, total lines read: ${linesCount}`),
         );
       });
 
@@ -57,7 +57,7 @@ program
       const writer = new TSVFileWriter(pathname);
 
       let offersAmount = Number(amount);
-      while (offersAmount) {
+      while (offersAmount > 0) {
         await writer.write(generator.generate());
         offersAmount--;
       }
