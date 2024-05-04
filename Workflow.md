@@ -72,6 +72,34 @@ npm start
 npm run mock-server
 ```
 
+#### CLI
+
+```bash
+npm run cli
+```
+
+##### Import
+
+Читает данные из файла в формате tsv и выводит их в JSON-формате
+
+`<path>` - путь к tsv-файлу для чтения данных
+
+```bash
+  npm run cli import ./mocks/offers.tsv
+```
+
+##### Generate
+
+Генерирует данные в формате tsv и записывает их в файл, принимает аргументы в следующем порядке
+
+`<amount>` - количество генерируемых объектов
+`<path>` - путь к tsv-файлу для записи данных
+`<url>` - URL mock-сервера для получения моковых данных
+
+```bash
+  npm run cli generate 100 ./mocks/offers-generated.tsv http://localhost:3377/api
+```
+
 ## Структура проекта
 
 ### Директория `src`
