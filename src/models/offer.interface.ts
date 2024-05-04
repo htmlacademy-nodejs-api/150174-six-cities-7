@@ -1,15 +1,12 @@
 import { User } from './user.interface.js';
 
-const City = {
-  Paris: 'Paris',
-  Amsterdam: 'Amsterdam',
-  Cologne: 'Cologne',
-  Brussels: 'Brussels',
-  Hamburg: 'Hamburg',
-  Dusseldorf: 'Dusseldorf',
-} as const;
-
-type City = keyof typeof City;
+type City =
+  | 'Paris'
+  | 'Amsterdam'
+  | 'Cologne'
+  | 'Brussels'
+  | 'Hamburg'
+  | 'Dusseldorf';
 
 type Housing = 'apartment' | 'house' | 'room' | 'hotel';
 

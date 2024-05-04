@@ -1,5 +1,4 @@
-import { readFileSync } from 'node:fs';
-
+import { createReadStream } from 'node:fs';
 import { FileReader } from './file-reader.interface.js';
 import {
   City,
@@ -8,24 +7,17 @@ import {
   Offer,
   User,
   UserType,
-} from '../models/index.js';
+} from '../../models/index.js';
+import EventEmitter from 'node:events';
 
-export class TSVFileReader implements FileReader {
-  private rawData = '';
+const DECIMAL_RADIX = 10;
+const STRING_BOOLEANS = ['true', 'false'];
 
-  constructor(private readonly filename: string) {}
+export class TSVFileReader extends EventEmitter implements FileReader {
+  private CHUNK_SIZE = 16384; // 16KB
 
-  private validateRawData(): void {
-    if (!this.rawData) {
-      throw new Error('File was not read');
-    }
-  }
-
-  private parseRawDataToOffers(): Offer[] {
-    return this.rawData
-      .split('\n')
-      .filter((row) => row.trim().length > 0)
-      .map((line) => this.parseLineToOffer(line));
+  constructor(private readonly filename: string) {
+    super();
   }
 
   private parseLineToOffer(line: string): Offer {
@@ -74,7 +66,7 @@ export class TSVFileReader implements FileReader {
         authorEmail,
         avatarUrl,
         password,
-        userType as UserType
+        userType as UserType,
       ),
       commentsAmount:
         Number(commentsAmount) && this.parseInteger(commentsAmount),
@@ -90,7 +82,7 @@ export class TSVFileReader implements FileReader {
   }
 
   private parseInteger(string: string): number {
-    return Number.parseInt(string, 10);
+    return Number.parseInt(string, DECIMAL_RADIX);
   }
 
   private parseFloat(string: string): number {
@@ -98,7 +90,11 @@ export class TSVFileReader implements FileReader {
   }
 
   private parseBoolean(string: string): boolean {
-    return string === 'true';
+    if (!STRING_BOOLEANS.includes(string)) {
+      throw new Error(`Invalid boolean value: ${string}`);
+    }
+
+    return string === STRING_BOOLEANS[0];
   }
 
   private parseUser(
@@ -106,17 +102,40 @@ export class TSVFileReader implements FileReader {
     email: User['email'],
     avatarUrl: User['avatarUrl'],
     password: User['password'],
-    type: User['type']
+    type: User['type'],
   ): User {
     return { name, email, avatarUrl, password, type };
   }
 
-  public read(): void {
-    this.rawData = readFileSync(this.filename, { encoding: 'utf-8' });
-  }
+  public async read(): Promise<void> {
+    const readStream = createReadStream(this.filename, {
+      highWaterMark: this.CHUNK_SIZE,
+      encoding: 'utf-8',
+    });
 
-  public toArray(): Offer[] {
-    this.validateRawData();
-    return this.parseRawDataToOffers();
+    let data = '';
+    let lineBreakPosition = -1;
+    let linesCount = 0;
+
+    readStream.on('readable', () => {
+      let chunk = readStream.read(this.CHUNK_SIZE);
+      while (null !== chunk) {
+        data += chunk;
+
+        while ((lineBreakPosition = data.indexOf('\n')) >= 0) {
+          const completeRow = data.slice(0, lineBreakPosition + 1);
+          data = data.slice(++lineBreakPosition);
+          linesCount++;
+
+          const parsedOffer = this.parseLineToOffer(completeRow);
+          this.emit('line', parsedOffer);
+        }
+        chunk = readStream.read(this.CHUNK_SIZE);
+      }
+    });
+
+    readStream.once('end', () => {
+      this.emit('end', linesCount);
+    });
   }
 }
