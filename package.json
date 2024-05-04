@@ -33,6 +33,7 @@
     "prettier-eslint": "^16.3.0",
     "rimraf": "5.0.1",
     "ts-node": "^10.9.2",
+    "tslib": "^2.6.2",
     "typescript": "5.4.5"
   },
   "type": "module",
@@ -48,6 +49,8 @@
     "convict-format-with-validator": "6.2.0",
     "dayjs": "^1.11.11",
     "dotenv": "16.4.5",
-    "pino": "9.0.0"
+    "inversify": "6.0.2",
+    "pino": "9.0.0",
+    "reflect-metadata": "0.2.2"
   }
 }

@@ -1,8 +1,10 @@
 import dotenv from 'dotenv';
+import { injectable } from 'inversify';
 import { Config } from './config.interface.js';
 import { ConfigSchema, configSchema } from './config.schema.js';
 
-class AppConfig implements Config {
+@injectable()
+class AppConfig implements Config<ConfigSchema> {
   private readonly config: ConfigSchema;
 
   constructor() {
@@ -19,7 +21,7 @@ class AppConfig implements Config {
     this.config = configSchema.getProperties();
   }
 
-  public get: Config['get'] = (key) => this.config[key];
+  public get: Config<ConfigSchema>['get'] = (key) => this.config[key];
 }
 
 export { AppConfig };

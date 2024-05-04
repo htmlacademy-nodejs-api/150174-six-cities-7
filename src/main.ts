@@ -1,4 +1,10 @@
 import { Application } from './application/index.js';
+import { Component } from './models/component.enum.js';
+import { container } from './inversify.config.js';
 
-const app = new Application();
-app.init();
+async function bootstrap() {
+  const application = container.get<Application>(Component.Application);
+  await application.init();
+}
+
+bootstrap();
