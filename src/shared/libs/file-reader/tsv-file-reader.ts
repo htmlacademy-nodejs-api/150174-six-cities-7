@@ -48,7 +48,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     return {
       name,
       description,
-      date,
+      createdDate: new Date(date),
       city: city as City,
       previewUrl,
       images: this.parseStringArray<string>(images),
@@ -114,7 +114,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     let lineBreakPosition = -1;
     let linesCount = 0;
 
-    readStream.on('readable', () => {
+    readStream.on('readable', async () => {
       let chunk = readStream.read(this.CHUNK_SIZE);
       while (null !== chunk) {
         data += chunk;
@@ -125,7 +125,9 @@ export class TSVFileReader extends EventEmitter implements FileReader {
           linesCount++;
 
           const parsedOffer = this.parseLineToOffer(completeRow);
-          this.emit('line', parsedOffer);
+          await new Promise((resolve) =>
+            this.emit('line', parsedOffer, resolve),
+          );
         }
         chunk = readStream.read(this.CHUNK_SIZE);
       }
