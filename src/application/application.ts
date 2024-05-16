@@ -1,8 +1,11 @@
 import { injectable, inject } from 'inversify';
-import { Config, ConfigSchema } from '../shared/libs/config/index.js';
-import { Logger } from '../shared/libs/logger/index.js';
+import type {
+  Config,
+  DBClient,
+  Logger,
+  ConfigSchema,
+} from '../shared/libs/index.js';
 import { Component } from '../models/component.enum.js';
-import { DBClient } from '../shared/libs/db-client/db-client.interface.js';
 
 @injectable()
 class Application {
