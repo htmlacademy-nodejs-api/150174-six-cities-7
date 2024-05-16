@@ -9,7 +9,6 @@ interface MockServerData {
   features: Feature[];
   descriptions: string[];
   avatars: string[];
-  passwords: string[];
   images: string[];
   previews: string[];
 }

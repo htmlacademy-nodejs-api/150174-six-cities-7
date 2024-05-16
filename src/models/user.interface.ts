@@ -4,7 +4,6 @@ interface User {
   name: string;
   email: string;
   avatarUrl: string;
-  password: string;
   type: UserType;
 }
 

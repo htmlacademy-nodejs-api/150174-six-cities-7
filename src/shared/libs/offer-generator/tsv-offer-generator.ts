@@ -64,7 +64,6 @@ class TSVOfferGenerator implements OfferGenerator {
     const price = getRandomNumberInRange(Price.MIN, Price.MAX).toString();
     const date = getRandomDate().toISOString();
     const authorName = getRandomArrayItem<string>(this.mockData.names);
-    const password = getRandomArrayItem(this.mockData.passwords);
     const authorEmail = getRandomArrayItem(this.mockData.emails);
     const avatarUrl = getRandomArrayItem(this.mockData.avatars);
     const previewUrl = getRandomArrayItem(this.mockData.previews);
@@ -103,7 +102,6 @@ class TSVOfferGenerator implements OfferGenerator {
       authorName,
       authorEmail,
       avatarUrl,
-      password,
       userType,
       latitude,
       longitude,

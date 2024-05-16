@@ -39,7 +39,6 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       authorName,
       authorEmail,
       avatarUrl,
-      password,
       userType,
       latitude,
       longitude,
@@ -65,7 +64,6 @@ export class TSVFileReader extends EventEmitter implements FileReader {
         authorName,
         authorEmail,
         avatarUrl,
-        password,
         userType as UserType,
       ),
       commentsAmount:
@@ -101,10 +99,9 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     name: User['name'],
     email: User['email'],
     avatarUrl: User['avatarUrl'],
-    password: User['password'],
     type: User['type'],
   ): User {
-    return { name, email, avatarUrl, password, type };
+    return { name, email, avatarUrl, type };
   }
 
   public async read(): Promise<void> {

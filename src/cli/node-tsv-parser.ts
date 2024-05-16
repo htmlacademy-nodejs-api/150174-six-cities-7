@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+import 'reflect-metadata';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { Command } from 'commander';
