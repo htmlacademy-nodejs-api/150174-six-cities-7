@@ -9,6 +9,8 @@ import {
 } from './shared/libs/config/index.js';
 import { Application } from './application/index.js';
 import { Component } from './models/component.enum.js';
+import { DBClient } from './shared/libs/db-client/db-client.interface.js';
+import { MongoDBClient } from './shared/libs/db-client/mongo.db-client.js';
 
 const container = new Container();
 container
@@ -19,6 +21,10 @@ container.bind<Logger>(Component.Logger).to(AppLogger).inSingletonScope();
 container
   .bind<Config<ConfigSchema>>(Component.Config)
   .to(AppConfig)
+  .inSingletonScope();
+container
+  .bind<DBClient>(Component.DBClient)
+  .to(MongoDBClient)
   .inSingletonScope();
 
 export { container };
