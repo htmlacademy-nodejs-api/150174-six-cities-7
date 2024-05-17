@@ -49,7 +49,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     return {
       name,
       description,
-      createdDate: new Date(date),
+      createdAt: new Date(date),
       city: city as City,
       previewUrl,
       images: this.parseStringArray<string>(images),
@@ -68,8 +68,9 @@ export class TSVFileReader extends EventEmitter implements FileReader {
         userType as UserType,
         password,
       ),
-      commentsAmount:
-        Number(commentsAmount) && this.parseInteger(commentsAmount),
+      commentsAmount: commentsAmount
+        ? this.parseInteger(commentsAmount)
+        : undefined,
       coordinates: {
         lat: this.parseFloat(latitude),
         lng: this.parseFloat(longitude),

@@ -1,3 +1,4 @@
+import * as mongoose from 'mongoose';
 import { Offer } from '../../../../models/offer.interface.js';
 
 class CreateOfferDto {
@@ -14,8 +15,7 @@ class CreateOfferDto {
   public guests!: Offer['guests'];
   public price!: Offer['price'];
   public features!: Offer['features'];
-  public userId!: string;
-  public createdDate!: Offer['createdDate'];
+  public userId!: mongoose.Types.ObjectId;
   public commentsAmount?: Offer['commentsAmount'];
   public coordinates!: Offer['coordinates'];
 }

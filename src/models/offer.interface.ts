@@ -28,7 +28,7 @@ type Coordinates = {
 interface Offer {
   name: string;
   description: string;
-  createdDate: Date;
+  createdAt: Date;
   city: City;
   previewUrl: string;
   images: string[];

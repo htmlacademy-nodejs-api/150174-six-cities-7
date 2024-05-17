@@ -38,11 +38,13 @@ export class DefaultUserService implements UserService {
     dto: CreateUserDto,
     salt: string,
   ): Promise<DocumentType<UserEntity>> {
+    console.log(dto);
     const existedUser = await this.findByEmail(dto.email);
 
     if (existedUser) {
       return existedUser;
     }
+    console.log('EXIST', existedUser);
 
     return this.create(dto, salt);
   }

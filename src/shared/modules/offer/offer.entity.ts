@@ -3,10 +3,8 @@ import {
   getModelForClass,
   prop,
   modelOptions,
-  // Ref,
 } from '@typegoose/typegoose';
-
-import { City, Offer } from '../../../models/index.js';
+import { City } from '../../../models/index.js';
 import { UserEntity } from '../user/user.entity.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 
@@ -15,66 +13,62 @@ export interface OfferEntity extends defaultClasses.Base {}
 
 @modelOptions({
   schemaOptions: {
-    collection: 'users',
+    collection: 'offers',
     timestamps: true,
   },
 })
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class OfferEntity extends defaultClasses.TimeStamps {
-  @prop({ required: true, type: String, trim: true })
-  public description!: Offer['description'];
+  @prop({ type: String, required: true, trim: true })
+  public description!: CreateOfferDto['description'];
 
-  @prop({ required: true, type: () => String, enum: City })
-  public city!: Offer['city'];
+  @prop({ type: String, required: true, enum: City })
+  public city!: CreateOfferDto['city'];
+
+  @prop({ type: String, required: true, trim: true })
+  public name!: CreateOfferDto['name'];
 
   @prop({ required: true, type: String, trim: true })
-  public name!: Offer['name'];
-
-  @prop({ required: true, type: String, trim: true })
-  public previewUrl!: Offer['previewUrl'];
+  public previewUrl!: CreateOfferDto['previewUrl'];
 
   @prop({ required: true, default: [] })
-  public images!: Offer['images'];
+  public images!: CreateOfferDto['images'];
 
-  @prop({ required: true, default: 0 })
-  public rating!: Offer['rating'];
+  @prop({ type: Number, required: true, default: 0 })
+  public rating!: CreateOfferDto['rating'];
 
-  @prop({ required: true })
-  public rooms!: Offer['rooms'];
-
-  @prop({ required: true })
-  public coordinates!: Offer['coordinates'];
+  @prop({ type: Number, required: true })
+  public rooms!: CreateOfferDto['rooms'];
 
   @prop({ required: true })
-  public price!: Offer['price'];
+  public coordinates!: CreateOfferDto['coordinates'];
 
-  @prop({ default: false })
-  public premium!: Offer['premium'];
+  @prop({ type: Number, required: true })
+  public price!: CreateOfferDto['price'];
 
-  @prop({ default: false })
-  public favorite!: Offer['favorite'];
+  @prop({ type: Boolean, default: false })
+  public premium!: CreateOfferDto['premium'];
 
-  @prop({ required: true })
-  public features!: Offer['features'];
+  @prop({ type: Boolean, default: false })
+  public favorite!: CreateOfferDto['favorite'];
 
-  @prop({ required: true })
-  public housing!: Offer['housing'];
+  @prop({ required: true, default: [] })
+  public features!: CreateOfferDto['features'];
 
-  @prop({ required: true })
-  public guests!: Offer['guests'];
+  @prop({ type: String, required: true })
+  public housing!: CreateOfferDto['housing'];
+
+  @prop({ type: Number, required: true })
+  public guests!: CreateOfferDto['guests'];
 
   @prop({
     ref: UserEntity,
     required: true,
-    _id: true,
   })
-  public userId!: string;
+  public userId!: CreateOfferDto['userId'];
 
-  @prop({ required: true, default: new Date() })
-  public createdDate!: Offer['createdDate'];
-
-  @prop({ required: false, default: 0 })
-  public commentsAmount: Offer['commentsAmount'];
+  @prop({ required: false, type: Number, default: 0 })
+  public commentsAmount: CreateOfferDto['commentsAmount'];
 
   constructor(offerData: CreateOfferDto) {
     super();
@@ -94,7 +88,6 @@ export class OfferEntity extends defaultClasses.TimeStamps {
     this.housing = offerData.housing;
     this.guests = offerData.guests;
     this.userId = offerData.userId;
-    this.createdDate = offerData.createdDate;
     this.commentsAmount = offerData.commentsAmount;
   }
 }

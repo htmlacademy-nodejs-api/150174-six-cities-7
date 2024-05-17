@@ -23,6 +23,7 @@ const importCommand = program
       const reader = new TSVFileReader(pathname);
       const userService = new DefaultUserService(console, UserModel);
       const offerService = new DefaultOfferService(console, OfferModel);
+
       reader.on('line', async (offer: Offer) => {
         console.log(chalk.green(JSON.stringify(offer)));
         const user = await userService.findOrCreate(
