@@ -14,7 +14,7 @@ class CreateOfferDto {
   public guests!: Offer['guests'];
   public price!: Offer['price'];
   public features!: Offer['features'];
-  public author!: Offer['author'];
+  public userId!: string;
   public createdDate!: Offer['createdDate'];
   public commentsAmount?: Offer['commentsAmount'];
   public coordinates!: Offer['coordinates'];

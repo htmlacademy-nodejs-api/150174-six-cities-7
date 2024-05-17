@@ -37,6 +37,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       price,
       features,
       authorName,
+      password,
       authorEmail,
       avatarUrl,
       userType,
@@ -65,6 +66,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
         authorEmail,
         avatarUrl,
         userType as UserType,
+        password,
       ),
       commentsAmount:
         Number(commentsAmount) && this.parseInteger(commentsAmount),
@@ -100,8 +102,9 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     email: User['email'],
     avatarUrl: User['avatarUrl'],
     type: User['type'],
+    password: User['password'],
   ): User {
-    return { name, email, avatarUrl, type };
+    return { name, email, avatarUrl, type, password };
   }
 
   public async read(): Promise<void> {

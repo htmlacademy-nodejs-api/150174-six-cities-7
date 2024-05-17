@@ -3,9 +3,12 @@ import {
   getModelForClass,
   prop,
   modelOptions,
+  // Ref,
 } from '@typegoose/typegoose';
 
 import { City, Offer } from '../../../models/index.js';
+import { UserEntity } from '../user/user.entity.js';
+import { CreateOfferDto } from './dto/create-offer.dto.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface OfferEntity extends defaultClasses.Base {}
@@ -17,59 +20,63 @@ export interface OfferEntity extends defaultClasses.Base {}
   },
 })
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
-export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
-  @prop({ required: true, default: '' })
-  public description: Offer['description'];
+export class OfferEntity extends defaultClasses.TimeStamps {
+  @prop({ required: true, type: String, trim: true })
+  public description!: Offer['description'];
 
-  @prop({ required: true, type: City, default: '' })
-  public city: Offer['city'];
+  @prop({ required: true, type: () => String, enum: City })
+  public city!: Offer['city'];
 
-  @prop({ required: true, default: '' })
-  public name: Offer['name'];
+  @prop({ required: true, type: String, trim: true })
+  public name!: Offer['name'];
 
-  @prop({ required: true, default: '' })
-  public previewUrl: Offer['previewUrl'];
+  @prop({ required: true, type: String, trim: true })
+  public previewUrl!: Offer['previewUrl'];
 
   @prop({ required: true, default: [] })
-  public images: Offer['images'];
+  public images!: Offer['images'];
 
   @prop({ required: true, default: 0 })
-  public rating: Offer['rating'];
+  public rating!: Offer['rating'];
 
   @prop({ required: true })
-  public rooms: Offer['rooms'];
+  public rooms!: Offer['rooms'];
 
   @prop({ required: true })
-  public coordinates: Offer['coordinates'];
+  public coordinates!: Offer['coordinates'];
 
   @prop({ required: true })
-  public price: Offer['price'];
+  public price!: Offer['price'];
+
+  @prop({ default: false })
+  public premium!: Offer['premium'];
+
+  @prop({ default: false })
+  public favorite!: Offer['favorite'];
 
   @prop({ required: true })
-  public premium: Offer['premium'];
+  public features!: Offer['features'];
 
   @prop({ required: true })
-  public favorite: Offer['favorite'];
+  public housing!: Offer['housing'];
 
   @prop({ required: true })
-  public features: Offer['features'];
+  public guests!: Offer['guests'];
 
-  @prop({ required: true })
-  public housing: Offer['housing'];
-
-  @prop({ required: true })
-  public guests: Offer['guests'];
-
-  @prop({ required: true })
-  public author: Offer['author'];
+  @prop({
+    ref: UserEntity,
+    required: true,
+    _id: true,
+  })
+  public userId!: string;
 
   @prop({ required: true, default: new Date() })
-  public createdDate: Offer['createdDate'];
+  public createdDate!: Offer['createdDate'];
 
   @prop({ required: false, default: 0 })
   public commentsAmount: Offer['commentsAmount'];
 
-  constructor(offerData: Offer) {
+  constructor(offerData: CreateOfferDto) {
     super();
 
     this.name = offerData.name;
@@ -86,7 +93,7 @@ export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
     this.features = offerData.features;
     this.housing = offerData.housing;
     this.guests = offerData.guests;
-    this.author = offerData.author;
+    this.userId = offerData.userId;
     this.createdDate = offerData.createdDate;
     this.commentsAmount = offerData.commentsAmount;
   }

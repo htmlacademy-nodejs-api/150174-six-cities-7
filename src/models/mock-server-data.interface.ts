@@ -4,6 +4,7 @@ interface MockServerData {
   offerNames: [];
   names: string[];
   emails: string[];
+  passwords: string[];
   cities: City[];
   housingTypes: Housing[];
   features: Feature[];

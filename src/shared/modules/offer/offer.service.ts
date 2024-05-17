@@ -19,12 +19,12 @@ export class DefaultOfferService implements OfferService {
     const Offer = new OfferEntity(dto);
 
     const result = await this.OfferModel.create(Offer);
-    this.logger.info(`New offer created: ${Offer._id}`);
+    this.logger.info(`New offer created: ${result._id}`);
 
     return result;
   }
 
   public async findById(id: string): Promise<DocumentType<OfferEntity> | null> {
-    return this.OfferModel.findById(id);
+    return this.OfferModel.findById(id).exec();
   }
 }
