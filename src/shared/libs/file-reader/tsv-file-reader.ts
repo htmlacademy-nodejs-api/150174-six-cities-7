@@ -120,7 +120,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
 
     readStream.on('readable', async () => {
       let chunk = readStream.read(this.CHUNK_SIZE);
-      while (null !== chunk) {
+      while (chunk !== null) {
         data += chunk;
 
         while ((lineBreakPosition = data.indexOf('\n')) >= 0) {
@@ -129,9 +129,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
           linesCount++;
 
           const parsedOffer = this.parseLineToOffer(completeRow);
-          await new Promise((resolve) =>
-            this.emit('line', parsedOffer, resolve),
-          );
+          this.emit('line', parsedOffer);
         }
         chunk = readStream.read(this.CHUNK_SIZE);
       }

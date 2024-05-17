@@ -18,13 +18,13 @@ const importCommand = program
   .action(async (pathname) => {
     try {
       const env = getEnv<ConfigSchema>();
-      await configureApp();
+      const app = await configureApp();
 
       const reader = new TSVFileReader(pathname);
       const userService = new DefaultUserService(console, UserModel);
       const offerService = new DefaultOfferService(console, OfferModel);
 
-      reader.on('line', async (offer: Offer) => {
+      const saveOffer = async (offer: Offer) => {
         console.log(chalk.green(JSON.stringify(offer)));
         const user = await userService.findOrCreate(
           offer.author as Required<Offer['author']>,
@@ -32,11 +32,19 @@ const importCommand = program
         );
 
         await offerService.create({ ...offer, userId: user.id });
+      };
+
+      const promises: Promise<void>[] = [];
+      reader.on('line', (offer: Offer) => {
+        promises.push(saveOffer(offer));
       });
-      reader.on('end', (linesCount) => {
+      reader.on('end', async (linesCount) => {
         console.log(
           chalk.bold(`Reading successful, total lines read: ${linesCount}`),
         );
+        await Promise.all(promises);
+        await app.close();
+        console.log(chalk.green('Import successful'));
       });
 
       reader.read();

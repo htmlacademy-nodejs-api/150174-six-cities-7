@@ -12,7 +12,7 @@ class Application {
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.Config) private readonly config: Config<ConfigSchema>,
-    @inject(Component.DBClient) private readonly dbClient: DBClient,
+    @inject(Component.DBClient) public readonly dbClient: DBClient,
   ) {}
 
   public async init() {
@@ -22,6 +22,11 @@ class Application {
     this.logger.info('Initialize database…');
     await this.dbClient.connect();
     this.logger.info('Database initialized');
+  }
+
+  public async close() {
+    await this.dbClient.disconnect();
+    this.logger.info('Exited successfully!');
   }
 }
 
