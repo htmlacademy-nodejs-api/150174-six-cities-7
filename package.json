@@ -17,7 +17,7 @@
     "clean": "rimraf dist",
     "ts": "tsc --noEmit && node --no-warnings=--no-warnings=ExperimentalWarning --loader ts-node/esm",
     "mock-server": "npx json-server ./mocks/mock-server-data.json --port=3377",
-    "cli": "npm run ts ./src/cli/node-tsv-parser.ts",
+    "cli": "npm run ts ./src/cli/main.ts",
     "db:dev": "docker compose --env-file .env.development up -d"
   },
   "devDependencies": {
