@@ -12,7 +12,7 @@ class Application {
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.Config) private readonly config: Config<ConfigSchema>,
-    @inject(Component.DBClient) public readonly dbClient: DBClient,
+    @inject(Component.DBClient) private readonly dbClient: DBClient,
   ) {}
 
   public async init() {

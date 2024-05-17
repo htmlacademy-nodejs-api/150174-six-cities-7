@@ -44,7 +44,11 @@ const importCommand = program
         );
         await Promise.all(promises);
         await app.close();
-        console.log(chalk.green('Import successful'));
+        console.log(
+          chalk.green(
+            `Import successful, ${promises.length} offers saved to database!`,
+          ),
+        );
       });
 
       reader.read();

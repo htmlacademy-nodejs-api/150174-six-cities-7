@@ -13,7 +13,7 @@ const RETRY_DELAY = 2000;
 
 @injectable()
 class MongoDBClient implements DBClient {
-  public mongoose: typeof Mongoose | null = null;
+  private mongoose: typeof Mongoose | null = null;
 
   private get databaseURI(): string {
     return getMongoURI({
