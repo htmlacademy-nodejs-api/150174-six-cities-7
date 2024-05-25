@@ -67,8 +67,11 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   })
   public userId: CreateOfferDto['userId'];
 
-  @prop({ required: false, type: Number, default: 0 })
-  public commentsAmount!: number;
+  @prop({ required: false, type: Number })
+  public commentsAmount: number = 0;
+
+  @prop({ required: true, type: Array, default: [] })
+  public usersFavorite = [];
 
   constructor(offerData: CreateOfferDto) {
     super();
