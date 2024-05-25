@@ -16,7 +16,6 @@ class CreateOfferDto {
   public price!: Offer['price'];
   public features!: Offer['features'];
   public userId!: mongoose.Types.ObjectId;
-  public commentsAmount?: Offer['commentsAmount'];
   public coordinates!: Offer['coordinates'];
 }
 
