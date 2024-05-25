@@ -117,4 +117,17 @@ export class DefaultOfferService implements OfferService {
       { new: true },
     ).exec();
   }
+
+  updateRating(
+    offerId: string,
+    rating: number,
+  ): Promise<DocumentType<OfferEntity> | null> {
+    return this.OfferModel.findByIdAndUpdate(
+      offerId,
+      {
+        $push: { usersRatings: rating },
+      },
+      { new: true },
+    ).exec();
+  }
 }

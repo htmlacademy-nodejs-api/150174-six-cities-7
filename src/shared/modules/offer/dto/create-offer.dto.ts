@@ -8,8 +8,6 @@ class CreateOfferDto {
   public previewUrl!: Offer['previewUrl'];
   public images!: Offer['images'];
   public premium!: Offer['premium'];
-  public favorite!: Offer['favorite'];
-  public rating!: Offer['rating'];
   public housing!: Offer['housing'];
   public rooms!: Offer['rooms'];
   public guests!: Offer['guests'];

@@ -26,4 +26,8 @@ export interface OfferService {
     offerId: string,
     userId: string,
   ): Promise<DocumentType<OfferEntity> | null>;
+  updateRating(
+    offerId: string,
+    rating: number,
+  ): Promise<DocumentType<OfferEntity> | null>;
 }

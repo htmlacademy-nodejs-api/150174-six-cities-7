@@ -31,4 +31,17 @@ export class DefaultCommentService implements CommentService {
   ): Promise<DocumentType<CommentEntity>[]> {
     return this.CommentModel.find({ offerId }).exec();
   }
+
+  public async updateRating(
+    commentId: string,
+    rating: number,
+  ): Promise<DocumentType<CommentEntity> | null> {
+    return this.CommentModel.findByIdAndUpdate(
+      commentId,
+      {
+        $push: { usersRatings: rating },
+      },
+      { new: true },
+    ).exec();
+  }
 }
