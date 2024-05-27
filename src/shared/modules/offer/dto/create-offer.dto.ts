@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { Offer } from '../../../../models/offer.interface.js';
+import { Offer } from '../../../models/offer.interface.js';
 
 class CreateOfferDto {
   public name!: Offer['name'];

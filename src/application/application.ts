@@ -5,8 +5,9 @@ import type {
   DBClient,
   Logger,
   ConfigSchema,
+  Controller,
 } from '../shared/libs/index.js';
-import { Component } from '../models/component.enum.js';
+import { Component } from '../shared/models/component.enum.js';
 
 @injectable()
 class Application {
@@ -16,7 +17,17 @@ class Application {
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.Config) private readonly config: Config<ConfigSchema>,
     @inject(Component.DBClient) private readonly dbClient: DBClient,
+    @inject(Component.UserController)
+    private readonly userController: Controller,
   ) {}
+
+  private async initServerMiddleware() {
+    this.server.use(express.json());
+  }
+
+  private async initControllers() {
+    this.server.use('/users', this.userController.router);
+  }
 
   private async initServer() {
     const port = this.config.get('PORT');
@@ -30,8 +41,15 @@ class Application {
     await this.dbClient.connect();
     this.logger.info('Database initialized!');
 
+    this.logger.info('Initialize server middleware…');
+    await this.initServerMiddleware();
+
+    this.logger.info('Initialize controllers…');
+    await this.initControllers();
+
     this.logger.info('Initialize server…');
     await this.initServer();
+
     this.logger.info(`Server is running on port: ${this.config.get('PORT')}!`);
   }
 

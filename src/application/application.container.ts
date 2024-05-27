@@ -1,5 +1,5 @@
 import { Container } from 'inversify';
-import { Component } from '../models/component.enum.js';
+import { Component } from '../shared/models/component.enum.js';
 import {
   AppConfig,
   AppLogger,

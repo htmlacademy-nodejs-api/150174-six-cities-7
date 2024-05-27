@@ -6,3 +6,6 @@ export type { Comment } from './comment.interface.js';
 export type { MockServerData } from './mock-server-data.interface.js';
 export { Component } from './component.enum.js';
 export { SortType } from './sort-type.enum.js';
+export { HttpMethod } from './http-method.enum.js';
+export type { Route } from './route.interface.js';
+export type { RequestBody, RequestParams } from './request.type.js';
