@@ -19,6 +19,8 @@ class Application {
     @inject(Component.DBClient) private readonly dbClient: DBClient,
     @inject(Component.UserController)
     private readonly userController: Controller,
+    @inject(Component.OfferController)
+    private readonly offerController: Controller,
   ) {}
 
   private async initServerMiddleware() {
@@ -27,6 +29,7 @@ class Application {
 
   private async initControllers() {
     this.server.use('/users', this.userController.router);
+    this.server.use('/offers', this.offerController.router);
   }
 
   private async initServer() {
