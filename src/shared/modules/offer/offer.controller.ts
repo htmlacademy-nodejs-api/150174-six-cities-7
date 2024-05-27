@@ -2,12 +2,12 @@ import { inject, injectable } from 'inversify';
 import { Response, Request } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import { BaseController } from '../../libs/rest/index.js';
+import { BaseController, HttpMethod } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
-import { Component, HttpMethod } from '../../models/index.js';
+import { Component } from '../../models/index.js';
 import { OfferService } from './offer-service.interface.js';
 import { OfferRdo } from './rdo/offer.rdo.js';
-import { HttpError } from '../../libs/rest/error/index.js';
+import { HttpError } from '../../libs/rest/errors/index.js';
 import { fillDTO } from '../../utils/service.js';
 import { OfferEndpoint } from './offer-endpoint.enum.js';
 import {

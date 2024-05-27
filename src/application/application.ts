@@ -6,6 +6,7 @@ import type {
   Logger,
   ConfigSchema,
   Controller,
+  ExceptionFilter,
 } from '../shared/libs/index.js';
 import { Component } from '../shared/models/component.enum.js';
 
@@ -17,6 +18,8 @@ class Application {
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.Config) private readonly config: Config<ConfigSchema>,
     @inject(Component.DBClient) private readonly dbClient: DBClient,
+    @inject(Component.ExceptionFilter)
+    private readonly exceptionFilter: ExceptionFilter,
     @inject(Component.UserController)
     private readonly userController: Controller,
     @inject(Component.OfferController)
@@ -30,6 +33,10 @@ class Application {
   private async initControllers() {
     this.server.use('/users', this.userController.router);
     this.server.use('/offers', this.offerController.router);
+  }
+
+  private async initExceptionFilters() {
+    this.server.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
   }
 
   private async initServer() {
@@ -49,6 +56,9 @@ class Application {
 
     this.logger.info('Initialize controllers…');
     await this.initControllers();
+
+    this.logger.info('Initialize exception filters…');
+    await this.initExceptionFilters();
 
     this.logger.info('Initialize server…');
     await this.initServer();

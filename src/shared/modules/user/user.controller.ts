@@ -2,14 +2,14 @@ import { inject, injectable } from 'inversify';
 import { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import { BaseController } from '../../libs/rest/index.js';
+import { BaseController, HttpMethod } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
-import { Component, HttpMethod } from '../../models/index.js';
+import { Component } from '../../models/index.js';
 import { CreateUserRequest, LoginUserRequest } from './user-request.type.js';
 import { UserService } from './user-service.interface.js';
 import { Config, ConfigSchema } from '../../libs/config/index.js';
 import { UserRdo } from './rdo/user.rdo.js';
-import { HttpError } from '../../libs/rest/error/index.js';
+import { HttpError } from '../../libs/rest/errors/index.js';
 import { fillDTO } from '../../utils/service.js';
 import { UserEndpoint } from './user-endpoint.enum.js';
 

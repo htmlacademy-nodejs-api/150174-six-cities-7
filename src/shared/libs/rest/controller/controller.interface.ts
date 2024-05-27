@@ -1,6 +1,6 @@
 import type { Response, Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { Route } from '../../../models/index.js';
+import { Route } from '../types/route.interface.js';
 
 interface Controller {
   router: Router;

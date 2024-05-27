@@ -3,9 +3,9 @@ import { StatusCodes } from 'http-status-codes';
 import { Response, Router } from 'express';
 import asyncHandler from 'express-async-handler';
 
-import type { Route } from '../../../models/index.js';
 import { Logger } from '../../logger/logger.interface.js';
 import { Controller } from './controller.interface.js';
+import { Route } from '../types/route.interface.js';
 
 @injectable()
 export abstract class BaseController implements Controller {
