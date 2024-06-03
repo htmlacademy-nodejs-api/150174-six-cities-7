@@ -15,6 +15,10 @@ export class DefaultUserService implements UserService {
     private readonly userModel: types.ModelType<UserEntity>,
   ) {}
 
+  public async exists(email: string): Promise<boolean> {
+    return (await this.userModel.exists({ email })) !== null;
+  }
+
   public async create(
     dto: CreateUserDto,
     salt: string,

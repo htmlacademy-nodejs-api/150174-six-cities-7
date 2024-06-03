@@ -12,6 +12,7 @@ import { UserRdo } from './rdo/user.rdo.js';
 import { HttpError } from '../../libs/rest/errors/index.js';
 import { fillDTO } from '../../utils/service.js';
 import { UserEndpoint } from './user-endpoint.enum.js';
+import { DocumentExistsMiddleware } from '../../libs/rest/middleware/document-exists.middleware.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -23,7 +24,11 @@ export class UserController extends BaseController {
   ) {
     super(logger);
     this.logger.info('Register routes for UserController…');
-
+    const userExistsMiddleware = new DocumentExistsMiddleware(
+      this.userService,
+      'user',
+      'email',
+    );
     this.addRoute({
       path: UserEndpoint.SignUp,
       method: HttpMethod.Post,
@@ -33,6 +38,7 @@ export class UserController extends BaseController {
       path: UserEndpoint.LogIn,
       method: HttpMethod.Post,
       handler: this.login,
+      middlewares: [userExistsMiddleware],
     });
     this.addRoute({
       path: UserEndpoint.LogOut,
