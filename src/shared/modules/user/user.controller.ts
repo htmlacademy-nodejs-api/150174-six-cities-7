@@ -12,7 +12,11 @@ import { UserRdo } from './rdo/user.rdo.js';
 import { HttpError } from '../../libs/rest/errors/index.js';
 import { fillDTO } from '../../utils/service.js';
 import { UserEndpoint } from './user-endpoint.enum.js';
-import { DocumentExistsMiddleware } from '../../libs/rest/middleware/document-exists.middleware.js';
+import { ValidateDtoMiddleware } from '../../libs/rest/middleware/validate-dto.middleware.js';
+import { LoginUserDto } from './dto/login-user.dto.js';
+import { loginUserDtoSchema } from './dto/login-user.schema.js';
+import { CreateUserDto } from './dto/create-user.dto.js';
+import { createUserDtoSchema } from './dto/create-user.schema.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -24,21 +28,21 @@ export class UserController extends BaseController {
   ) {
     super(logger);
     this.logger.info('Register routes for UserController…');
-    const userExistsMiddleware = new DocumentExistsMiddleware(
-      this.userService,
-      'user',
-      'email',
-    );
     this.addRoute({
       path: UserEndpoint.SignUp,
       method: HttpMethod.Post,
       handler: this.create,
+      middlewares: [
+        new ValidateDtoMiddleware(CreateUserDto, createUserDtoSchema),
+      ],
     });
     this.addRoute({
       path: UserEndpoint.LogIn,
       method: HttpMethod.Post,
       handler: this.login,
-      middlewares: [userExistsMiddleware],
+      middlewares: [
+        new ValidateDtoMiddleware(LoginUserDto, loginUserDtoSchema),
+      ],
     });
     this.addRoute({
       path: UserEndpoint.LogOut,
