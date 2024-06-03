@@ -15,6 +15,11 @@ import {
 } from './offer-request.type.js';
 import { DocumentExistsMiddleware } from '../../libs/rest/middleware/document-exists.middleware.js';
 import { ValidateObjectIdMiddleware } from '../../libs/rest/middleware/validate-object-id.middleware.js';
+import { ValidateDtoMiddleware } from '../../libs/rest/middleware/validate-dto.middleware.js';
+import { CreateOfferDto } from './dto/create-offer.dto.js';
+import { createOfferDtoSchema } from './dto/create-offer.schema.js';
+import { UpdateOfferDto } from './dto/update-offer.dto.js';
+import { updateOfferDtoSchema } from './dto/update-offer.schema.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -41,6 +46,9 @@ export class OfferController extends BaseController {
       path: OfferEndpoint.Index,
       method: HttpMethod.Post,
       handler: this.create,
+      middlewares: [
+        new ValidateDtoMiddleware(CreateOfferDto, createOfferDtoSchema),
+      ],
     });
     this.addRoute({
       path: OfferEndpoint.Offer,
@@ -52,7 +60,11 @@ export class OfferController extends BaseController {
       path: OfferEndpoint.Offer,
       method: HttpMethod.Put,
       handler: this.update,
-      middlewares: [validateObjectIdMiddleware, offerExistsMiddleware],
+      middlewares: [
+        validateObjectIdMiddleware,
+        new ValidateDtoMiddleware(UpdateOfferDto, updateOfferDtoSchema),
+        offerExistsMiddleware,
+      ],
     });
     this.addRoute({
       path: OfferEndpoint.Offer,

@@ -1,5 +1,5 @@
-export type { Offer, Coordinates, Housing } from './offer.interface.js';
-export { City, Feature } from './offer.interface.js';
+export type { Offer, Coordinates } from './offer.interface.js';
+export { City, Feature, Housing } from './offer.interface.js';
 export type { User } from './user.interface.js';
 export { UserType } from './user.interface.js';
 export type { Comment } from './comment.interface.js';
