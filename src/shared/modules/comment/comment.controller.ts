@@ -13,6 +13,9 @@ import { CommentService } from './comment-service.interface.js';
 import { RequestOfferParams } from '../offer/offer-request.type.js';
 import { ValidateObjectIdMiddleware } from '../../libs/rest/middleware/validate-object-id.middleware.js';
 import { DocumentExistsMiddleware } from '../../libs/rest/middleware/document-exists.middleware.js';
+import { ValidateDtoMiddleware } from '../../libs/rest/middleware/validate-dto.middleware.js';
+import { CreateCommentDto } from './dto/create-comment.dto.js';
+import { createCommentDtoSchema } from './dto/create-comment.schema.js';
 
 @injectable()
 class CommentController extends BaseController {
@@ -47,6 +50,7 @@ class CommentController extends BaseController {
       middlewares: [
         validateOfferIdMiddleware,
         validateUserIdMiddleware,
+        new ValidateDtoMiddleware(CreateCommentDto, createCommentDtoSchema),
         offerExistsMiddleware,
       ],
     });
