@@ -9,6 +9,7 @@ import { UserEntity } from '../user/user.entity.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { calculateAggregateRating } from '../../utils/rating.js';
 import { DocumentCollection } from '../../libs/rest/types/document-collection.enum.js';
+import * as mongoose from 'mongoose';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface OfferEntity extends defaultClasses.Base {}
@@ -69,10 +70,10 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public commentsAmount: number = 0;
 
   @prop({ type: Array, required: true, default: [] })
-  public usersFavorite = [];
+  public usersFavorite: mongoose.Types.ObjectId[] = [];
 
   @prop({ type: Array, required: true, default: [] })
-  public usersRatings = [];
+  public usersRatings: number[] = [];
 
   public get rating(): number {
     return calculateAggregateRating(this.usersRatings);
