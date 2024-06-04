@@ -20,23 +20,34 @@ import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { createOfferDtoSchema } from './dto/create-offer.schema.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { updateOfferDtoSchema } from './dto/update-offer.schema.js';
+import { UserService } from '../user/user-service.interface.js';
 
 @injectable()
 export class OfferController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.OfferService) private readonly offerService: OfferService,
+    @inject(Component.UserService) private readonly userService: UserService,
   ) {
     super(logger);
     this.logger.info('Register routes for OfferController…');
-    const validateObjectIdMiddleware = new ValidateObjectIdMiddleware(
-      'offerId',
+    const validateUserIdMiddleware = new ValidateObjectIdMiddleware(
+      'userId',
+      'body',
+    );
+    const validateOfferIdMiddleware = new ValidateObjectIdMiddleware('offerId');
+    const userExistsMiddleware = new DocumentExistsMiddleware(
+      this.userService,
+      'user',
+      'userId',
+      'body',
     );
     const offerExistsMiddleware = new DocumentExistsMiddleware(
       this.offerService,
       'offer',
       'offerId',
     );
+
     this.addRoute({
       path: OfferEndpoint.Index,
       method: HttpMethod.Get,
@@ -47,21 +58,23 @@ export class OfferController extends BaseController {
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [
+        validateUserIdMiddleware,
         new ValidateDtoMiddleware(CreateOfferDto, createOfferDtoSchema),
+        userExistsMiddleware,
       ],
     });
     this.addRoute({
       path: OfferEndpoint.Offer,
       method: HttpMethod.Get,
       handler: this.show,
-      middlewares: [validateObjectIdMiddleware, offerExistsMiddleware],
+      middlewares: [validateOfferIdMiddleware, offerExistsMiddleware],
     });
     this.addRoute({
       path: OfferEndpoint.Offer,
       method: HttpMethod.Put,
       handler: this.update,
       middlewares: [
-        validateObjectIdMiddleware,
+        validateOfferIdMiddleware,
         new ValidateDtoMiddleware(UpdateOfferDto, updateOfferDtoSchema),
         offerExistsMiddleware,
       ],
@@ -70,7 +83,7 @@ export class OfferController extends BaseController {
       path: OfferEndpoint.Offer,
       method: HttpMethod.Delete,
       handler: this.delete,
-      middlewares: [validateObjectIdMiddleware, offerExistsMiddleware],
+      middlewares: [validateOfferIdMiddleware, offerExistsMiddleware],
     });
   }
 

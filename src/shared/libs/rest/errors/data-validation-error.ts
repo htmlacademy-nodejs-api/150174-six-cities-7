@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import { ValidationError } from 'joi';
+import { ValidationErrorItem } from 'joi';
 
 class DataValidationError extends Error {
   public statusCode = StatusCodes.BAD_REQUEST;
@@ -7,7 +7,8 @@ class DataValidationError extends Error {
   constructor(
     public message: string,
     public detail: string,
-    public validationError: ValidationError,
+    public constraints: ValidationErrorItem[],
+    public reference?: string,
   ) {
     super(message);
   }

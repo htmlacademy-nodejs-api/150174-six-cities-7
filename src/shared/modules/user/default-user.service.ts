@@ -15,8 +15,8 @@ export class DefaultUserService implements UserService {
     private readonly userModel: types.ModelType<UserEntity>,
   ) {}
 
-  public async exists(email: string): Promise<boolean> {
-    return (await this.userModel.exists({ email })) !== null;
+  public async exists(id: string): Promise<boolean> {
+    return (await this.userModel.exists({ _id: id })) !== null;
   }
 
   public async create(

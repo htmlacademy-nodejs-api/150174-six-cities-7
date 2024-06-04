@@ -25,9 +25,13 @@ export class AppExceptionFilter implements ExceptionFilter {
       `[${error.detail}]: ${error.statusCode} — ${error.message}`,
       error,
     );
-    res
-      .status(error.statusCode)
-      .json(createErrorObject(error.message, error.detail));
+    res.status(error.statusCode).json(
+      createErrorObject({
+        title: error.message,
+        detail: error.detail,
+        reference: error.reference,
+      }),
+    );
   }
 
   private handleValidationError(
@@ -40,11 +44,14 @@ export class AppExceptionFilter implements ExceptionFilter {
       `[${error.detail}]: ${error.statusCode} — ${error.message}`,
       error,
     );
-    res
-      .status(error.statusCode)
-      .json(
-        createErrorObject(error.message, error.detail, error.validationError),
-      );
+    res.status(error.statusCode).json(
+      createErrorObject({
+        title: error.message,
+        detail: error.detail,
+        constraints: error.constraints,
+        reference: error.reference,
+      }),
+    );
   }
 
   private handleOtherError(
@@ -56,7 +63,7 @@ export class AppExceptionFilter implements ExceptionFilter {
     this.logger.error(error.message, error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json(createErrorObject(error.message));
+      .json(createErrorObject({ title: error.message }));
   }
 
   public catch(

@@ -1,5 +1,6 @@
 import { ClassConstructor, plainToInstance } from 'class-transformer';
-import { ValidationError } from 'joi';
+import { ValidationErrorItem } from 'joi';
+import { ErrorObject } from '../models/error-object.type.js';
 
 function fillDTO<T, V>(someDto: ClassConstructor<T>, plainObject: V) {
   return plainToInstance(someDto, plainObject, {
@@ -7,22 +8,19 @@ function fillDTO<T, V>(someDto: ClassConstructor<T>, plainObject: V) {
   });
 }
 
-type InvalidField = {
-  name: string;
-  message: string;
-};
-
-interface ErrorObject {
+interface CreateErrorObjectParams {
   title: string;
   detail?: string;
-  fields?: InvalidField[];
+  constraints?: ValidationErrorItem[];
+  reference?: string;
 }
 
-function createErrorObject(
-  title: string,
-  detail?: string,
-  validationError?: ValidationError,
-): ErrorObject {
+function createErrorObject({
+  title,
+  detail,
+  constraints,
+  reference,
+}: CreateErrorObjectParams): ErrorObject {
   const errorObject: ErrorObject = {
     title,
   };
@@ -31,12 +29,16 @@ function createErrorObject(
     errorObject.detail = detail;
   }
 
-  if (validationError) {
-    errorObject.title = `${validationError.name}: ${title}`;
-    errorObject.fields = validationError.details.map((item) => ({
+  if (constraints) {
+    errorObject.constraints = constraints.map((item) => ({
       name: item.context?.key || '',
       message: item.message,
+      type: item.type,
     }));
+  }
+
+  if (reference) {
+    errorObject.reference = reference;
   }
 
   return errorObject;

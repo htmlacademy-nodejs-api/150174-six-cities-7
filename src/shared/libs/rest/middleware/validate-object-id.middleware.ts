@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import { Types } from 'mongoose';
-import { StatusCodes } from 'http-status-codes';
 
 import { Middleware } from './middleware.interface.js';
-import { HttpError } from '../errors/index.js';
+import { DataValidationError } from '../errors/data-validation-error.js';
+
+const MONGO_OBJECT_ID_DOCS_URL =
+  'https://www.mongodb.com/docs/manual/reference/bson-types/#std-label-objectid';
 
 class ValidateObjectIdMiddleware implements Middleware {
   constructor(
@@ -17,10 +19,22 @@ class ValidateObjectIdMiddleware implements Middleware {
       return next();
     }
 
-    throw new HttpError(
-      StatusCodes.BAD_REQUEST,
+    throw new DataValidationError(
       `${objectId} is not valid ObjectID`,
       'ValidateObjectIdMiddleware',
+      [
+        {
+          path: [this.param],
+          type: 'objectId.base',
+          context: {
+            key: this.param,
+            label: this.param,
+            value: objectId,
+          },
+          message: `${this.param} must be valid ObjectID`,
+        },
+      ],
+      MONGO_OBJECT_ID_DOCS_URL,
     );
   }
 }

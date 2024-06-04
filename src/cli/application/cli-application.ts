@@ -21,7 +21,11 @@ const configureApp = async () => {
   const userService = new DefaultUserService(logger, UserModel);
   const userController = new UserController(logger, userService, config);
   const offerService = new DefaultOfferService(logger, OfferModel);
-  const offerController = new OfferController(logger, offerService);
+  const offerController = new OfferController(
+    logger,
+    offerService,
+    userService,
+  );
   const commentService = new DefaultCommentService(logger, CommentModel);
   const commentController = new CommentController(
     logger,
