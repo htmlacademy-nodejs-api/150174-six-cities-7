@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import { BaseController, HttpMethod } from '../../libs/rest/index.js';
@@ -17,6 +17,8 @@ import { LoginUserDto } from './dto/login-user.dto.js';
 import { loginUserDtoSchema } from './dto/login-user.schema.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { createUserDtoSchema } from './dto/create-user.schema.js';
+import { UploadFileMiddleware } from '../../libs/rest/middleware/upload-file.middelware.js';
+import { ValidateObjectIdMiddleware } from '../../libs/rest/middleware/validate-object-id.middleware.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -48,6 +50,18 @@ export class UserController extends BaseController {
       path: UserEndpoint.LogOut,
       method: HttpMethod.Post,
       handler: this.logout,
+    });
+    this.addRoute({
+      path: UserEndpoint.UploadAvatar,
+      method: HttpMethod.Post,
+      handler: this.uploadAvatar,
+      middlewares: [
+        new ValidateObjectIdMiddleware('userId'),
+        new UploadFileMiddleware(
+          this.configService.get('STATIC_DIR'),
+          'avatar',
+        ),
+      ],
     });
   }
 
@@ -99,5 +113,11 @@ export class UserController extends BaseController {
       'Not implemented',
       'UserController',
     );
+  }
+
+  public async uploadAvatar(req: Request, res: Response) {
+    this.created(res, {
+      avatarUrl: req.file?.path,
+    });
   }
 }

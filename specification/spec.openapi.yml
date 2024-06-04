@@ -101,6 +101,51 @@ paths:
         '401':
           description: Пользователь не авторизован.
 
+  /users/{userId}/avatar:
+    post:
+      tags:
+        - users
+      summary: Загрузка аватара пользователя.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 5f8f1f2b5b3e2b001f3b3b3b
+
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            encoding:
+              avatar:
+                contentType: image/jpeg, image/png
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+
+      responses:
+        '201':
+          description: Аватар загружен. Путь к файлу.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  avatarUrl:
+                    type: string
+                    example: https://example.com/avatar.jpg
+
+        '404':
+          description: Пользователь не найден.
+
+        '415':
+          description: Некорректный формат файла.
+
   /offers:
     get:
       tags:
