@@ -19,7 +19,7 @@ POST http://localhost:3456/users/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "example@example.com",
+  "email": "a@b.com",
   "password": "sample"
 }
 
@@ -35,7 +35,7 @@ Content-Type: application/json
 
 ## Загрузить аватар пользователя
 
-POST http://localhost:3456/users/62823cb2c5a64ce9f1b50eb6/avatar HTTP/1.1
+POST http://localhost:3456/users/6652339b811be39a7a8ed1f4/avatar HTTP/1.1
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
@@ -45,4 +45,28 @@ Content-Type: image/png
 < /Users/anatoly/Desktop/image.png
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
-##
+###
+
+## Получить избранные предложения пользователя
+
+GET http://localhost:3456/users/6652339b811be39a7a8ed1f4/favorites HTTP/1.1
+Content-Type: application/json
+
+###
+
+## Добавить предложение в избранное
+
+POST http://localhost:3456/users/6652339b811be39a7a8ed1f4/favorites HTTP/1.1
+Content-Type: application/json
+
+{
+  "offerId": "665e5d60688fbc080bc63a02"
+}
+
+###
+
+## Удалить предложение из избранного
+
+DELETE http://localhost:3456/users/6652339b811be39a7a8ed1f4/favorites/66523434115ea323dacecd68 HTTP/1.1
+
+###
