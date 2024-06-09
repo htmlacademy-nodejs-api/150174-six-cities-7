@@ -5,10 +5,10 @@ POST http://localhost:3456/users/sign-up HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "example@example.com",
+  "email": "ad@example.ru",
   "password": "sample",
-  "name": "John Doe",
-  "type": "plain"
+  "name": "Anatoly Dolgov",
+  "type": "pro"
 }
 
 ###
@@ -60,13 +60,13 @@ POST http://localhost:3456/users/6652339b811be39a7a8ed1f4/favorites HTTP/1.1
 Content-Type: application/json
 
 {
-  "offerId": "665e5d60688fbc080bc63a02"
+  "offerId": "665cfe4729677b1f4a2ec91f"
 }
 
 ###
 
 ## Удалить предложение из избранного
 
-DELETE http://localhost:3456/users/6652339b811be39a7a8ed1f4/favorites/66523434115ea323dacecd68 HTTP/1.1
+DELETE http://localhost:3456/users/6652339b811be39a7a8ed1f4/favorites/665e5d60688fbc080bc63a02 HTTP/1.1
 
 ###

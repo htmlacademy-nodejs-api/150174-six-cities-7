@@ -14,11 +14,11 @@ Content-Type: application/json
 {
   "name": "Предложение 1",
   "description": "Описание предложения 1",
-  "price": 100,
-  "city": "Paris",
-  "housing": "apartment",
-  "rooms": 2,
-  "guests": 4,
+  "price": 2345,
+  "city": "Cologne",
+  "housing": "hotel",
+  "rooms": 1,
+  "guests": 2,
   "previewUrl": "https://example.com/preview.jpg",
   "features": [
     "Baby seat",

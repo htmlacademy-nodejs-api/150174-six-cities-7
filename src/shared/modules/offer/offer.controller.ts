@@ -129,8 +129,8 @@ export class OfferController extends BaseController {
     res: Response,
   ): Promise<void> {
     const { offerId } = params;
-    const result = await this.offerService.deleteById(offerId);
+    await this.offerService.deleteById(offerId);
 
-    this.noContent(res, fillDTO(OfferRdo, result));
+    this.noContent(res);
   }
 }

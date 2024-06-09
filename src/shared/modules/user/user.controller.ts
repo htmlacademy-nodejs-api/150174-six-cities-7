@@ -112,6 +112,13 @@ export class UserController extends BaseController {
       middlewares: [
         new ValidateObjectIdMiddleware('userId'),
         new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.userService, 'user', 'userId'),
+        new DocumentExistsMiddleware(
+          this.offerService,
+          'offer',
+          'offerId',
+          'params',
+        ),
       ],
     });
   }
@@ -175,7 +182,7 @@ export class UserController extends BaseController {
       params.userId,
       body.offerId,
     );
-    this.ok(res, fillDTO(UserRdo, result));
+    this.ok(res, fillDTO(OfferReducedRdo, result));
   }
 
   public async removeOfferFromFavorites(
@@ -186,7 +193,7 @@ export class UserController extends BaseController {
       params.userId,
       params.offerId,
     );
-    this.noContent(res, fillDTO(UserRdo, result));
+    this.ok(res, fillDTO(OfferReducedRdo, result));
   }
 
   public async uploadAvatar(req: Request, res: Response) {
