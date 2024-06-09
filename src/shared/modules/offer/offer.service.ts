@@ -12,7 +12,7 @@ import { SortType } from '../../models/sort-type.enum.js';
 import { City } from '../../models/offer.interface.js';
 
 @injectable()
-export class DefaultOfferService implements OfferService {
+class DefaultOfferService implements OfferService {
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.OfferModel)
@@ -115,3 +115,5 @@ export class DefaultOfferService implements OfferService {
     ).exec();
   }
 }
+
+export { DefaultOfferService };

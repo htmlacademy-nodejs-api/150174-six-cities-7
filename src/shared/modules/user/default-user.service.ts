@@ -9,7 +9,7 @@ import { Component } from '../../models/component.enum.js';
 import { OfferEntity } from '../offer/offer.entity.js';
 
 @injectable()
-export class DefaultUserService implements UserService {
+class DefaultUserService implements UserService {
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.UserModel)
@@ -113,3 +113,5 @@ export class DefaultUserService implements UserService {
     return result.favoriteOffers;
   }
 }
+
+export { DefaultUserService };
