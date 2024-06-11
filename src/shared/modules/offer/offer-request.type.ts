@@ -9,6 +9,7 @@ type RequestOfferParams =
       offerId: string;
     }
   | ParamsDictionary;
+
 type CreateOfferRequest = Request<RequestParams, RequestBody, CreateOfferDto>;
 type UpdateOfferRequest = Request<
   RequestOfferParams,

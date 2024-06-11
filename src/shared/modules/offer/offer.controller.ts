@@ -23,11 +23,18 @@ import { updateOfferDtoSchema } from './dto/update-offer.schema.js';
 import { UserService } from '../user/user-service.interface.js';
 import { OfferReducedRdo } from './rdo/offer-reduced.rdo.js';
 import { PrivateRouteMiddleware } from '../../libs/rest/middleware/private-route.middleware.js';
+import { HttpError } from '../../libs/rest/errors/http-error.js';
+import { StatusCodes } from 'http-status-codes';
+import { UploadImagesRdo } from './rdo/upload-images.rdo.js';
+import { UploadFileMiddleware } from '../../libs/rest/middleware/upload-file.middelware.js';
+import { Config, ConfigSchema } from '../../libs/index.js';
+import { UploadMultipleFilesMiddleware } from '../../libs/rest/middleware/upload-multiple-files.middleware.js';
 
 @injectable()
 export class OfferController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
+    @inject(Component.Config) protected readonly config: Config<ConfigSchema>,
     @inject(Component.OfferService) private readonly offerService: OfferService,
     @inject(Component.UserService) private readonly userService: UserService,
   ) {
@@ -82,6 +89,31 @@ export class OfferController extends BaseController {
         validateOfferIdMiddleware,
         new ValidateDtoMiddleware(UpdateOfferDto, updateOfferDtoSchema),
         offerExistsMiddleware,
+      ],
+    });
+    this.addRoute({
+      path: OfferEndpoint.UploadImages,
+      method: HttpMethod.Post,
+      handler: this.uploadImages,
+      middlewares: [
+        privateRouteMiddleware,
+        validateOfferIdMiddleware,
+        offerExistsMiddleware,
+        new UploadMultipleFilesMiddleware(
+          this.config.get('STATIC_DIR'),
+          'images',
+        ),
+      ],
+    });
+    this.addRoute({
+      path: OfferEndpoint.UploadPreviewUrl,
+      method: HttpMethod.Post,
+      handler: this.uploadPreviewUrl,
+      middlewares: [
+        privateRouteMiddleware,
+        validateOfferIdMiddleware,
+        offerExistsMiddleware,
+        new UploadFileMiddleware(this.config.get('STATIC_DIR'), 'previewUrl'),
       ],
     });
     this.addRoute({
@@ -140,5 +172,38 @@ export class OfferController extends BaseController {
     await this.offerService.deleteById(offerId);
 
     this.noContent(res);
+  }
+
+  public async uploadImages(
+    { params, files }: Request<RequestOfferParams>,
+    res: Response,
+  ) {
+    if (!files) {
+      throw new HttpError(StatusCodes.BAD_REQUEST, 'No files provided');
+    }
+
+    const { offerId } = params;
+    const updateDto: UpdateOfferDto = {
+      images: Array.isArray(files)
+        ? files.map((el) => el.filename)
+        : files.images.map((el) => el.filename),
+    };
+
+    await this.offerService.updateById(offerId, updateDto);
+    this.created(res, fillDTO(UploadImagesRdo, updateDto));
+  }
+
+  public async uploadPreviewUrl({ params, file }: Request, res: Response) {
+    if (!file) {
+      throw new HttpError(StatusCodes.BAD_REQUEST, 'No file provided');
+    }
+
+    const { offerId } = params;
+    const updateDto: UpdateOfferDto = {
+      previewUrl: file.filename,
+    };
+
+    await this.offerService.updateById(offerId, updateDto);
+    this.created(res, fillDTO(UploadImagesRdo, updateDto));
   }
 }

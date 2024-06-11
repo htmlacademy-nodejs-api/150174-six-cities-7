@@ -32,6 +32,7 @@ const configureApp = async () => {
   );
   const offerController = new OfferController(
     logger,
+    config,
     offerService,
     userService,
   );
