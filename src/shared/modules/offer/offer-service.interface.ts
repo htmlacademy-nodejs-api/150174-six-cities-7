@@ -21,8 +21,8 @@ interface OfferService extends DocumentExists {
   ): Promise<DocumentType<OfferEntity>>;
   findById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
   find(
-    filter?: OffersFindFilterParams,
-    query?: OffersFindQueryParams,
+    filter: OffersFindFilterParams,
+    query: OffersFindQueryParams,
   ): Promise<DocumentType<OfferEntity>[]>;
   updateById(
     offerId: string,

@@ -25,7 +25,7 @@ class OfferRdo {
   public premium!: Offer['premium'];
 
   @Expose()
-  public favourite!: Offer['favorite'];
+  public favorite!: Offer['favorite'];
 
   @Expose()
   public housing!: Offer['housing'];
