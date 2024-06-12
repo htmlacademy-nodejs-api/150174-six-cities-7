@@ -10,7 +10,7 @@ const MONGO_OBJECT_ID_DOCS_URL =
 class ValidateObjectIdMiddleware implements Middleware {
   constructor(
     private param: string,
-    private target: 'params' | 'body' = 'params',
+    private target: 'params' | 'body' | 'tokenPayload' = 'params',
   ) {}
 
   public execute(req: Request, _res: Response, next: NextFunction): void {

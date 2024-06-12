@@ -50,6 +50,9 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ type: Boolean, default: false })
   public premium!: CreateOfferDto['premium'];
 
+  @prop({ type: Boolean, default: false })
+  public favorite!: boolean;
+
   @prop({ type: Array, required: true, default: [] })
   public features!: CreateOfferDto['features'];
 
