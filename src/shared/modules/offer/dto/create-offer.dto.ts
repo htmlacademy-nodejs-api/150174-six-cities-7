@@ -10,7 +10,6 @@ class CreateOfferDto {
   public guests!: Offer['guests'];
   public price!: Offer['price'];
   public features!: Offer['features'];
-  public userId!: string;
   public coordinates!: Offer['coordinates'];
 }
 

@@ -10,6 +10,21 @@ type RequestOfferParams =
     }
   | ParamsDictionary;
 
+type RequestOffersQuery = {
+  limit?: string;
+  offset?: string;
+  sort?: string;
+  city?: string;
+  premium?: string;
+};
+
+type GetOffersRequest = Request<
+  RequestParams,
+  RequestBody,
+  undefined,
+  RequestOffersQuery
+>;
+
 type CreateOfferRequest = Request<RequestParams, RequestBody, CreateOfferDto>;
 type UpdateOfferRequest = Request<
   RequestOfferParams,
@@ -17,4 +32,10 @@ type UpdateOfferRequest = Request<
   UpdateOfferDto
 >;
 
-export type { CreateOfferRequest, UpdateOfferRequest, RequestOfferParams };
+export type {
+  RequestOffersQuery,
+  GetOffersRequest,
+  CreateOfferRequest,
+  UpdateOfferRequest,
+  RequestOfferParams,
+};

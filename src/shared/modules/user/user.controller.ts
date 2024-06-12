@@ -65,6 +65,11 @@ export class UserController extends BaseController {
       ],
     });
     this.addRoute({
+      path: UserEndpoint.LogIn,
+      method: HttpMethod.Get,
+      handler: this.checkToken,
+    });
+    this.addRoute({
       path: UserEndpoint.LogOut,
       method: HttpMethod.Post,
       handler: this.logout,
@@ -163,6 +168,13 @@ export class UserController extends BaseController {
       token,
     });
     this.ok(res, responseData);
+  }
+
+  public async checkToken(
+    { tokenPayload }: Request,
+    res: Response,
+  ): Promise<void> {
+    this.ok(res, tokenPayload);
   }
 
   public async logout(_req: object, _res: Response): Promise<void> {

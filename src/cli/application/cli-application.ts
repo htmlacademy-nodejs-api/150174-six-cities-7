@@ -30,12 +30,7 @@ const configureApp = async () => {
     authService,
     config,
   );
-  const offerController = new OfferController(
-    logger,
-    config,
-    offerService,
-    userService,
-  );
+  const offerController = new OfferController(logger, config, offerService);
   const commentService = new DefaultCommentService(logger, CommentModel);
   const commentController = new CommentController(
     logger,
