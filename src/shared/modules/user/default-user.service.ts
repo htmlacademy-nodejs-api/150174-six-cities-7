@@ -22,6 +22,10 @@ class DefaultUserService implements UserService {
     return (await this.userModel.exists({ _id: id })) !== null;
   }
 
+  public async isOwner(id: string, userId: string): Promise<boolean> {
+    return id === userId;
+  }
+
   public async create(
     dto: CreateUserDto,
     salt: string,

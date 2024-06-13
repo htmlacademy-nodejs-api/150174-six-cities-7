@@ -30,6 +30,8 @@ import { UploadFileMiddleware } from '../../libs/rest/middleware/upload-file.mid
 import { Config, ConfigSchema } from '../../libs/index.js';
 import { UploadMultipleFilesMiddleware } from '../../libs/rest/middleware/upload-multiple-files.middleware.js';
 import { UserService } from '../user/user-service.interface.js';
+import { DocumentOwnerMiddleware } from '../../libs/rest/middleware/document-owner.middleware.js';
+import { DocumentCollection } from '../../libs/rest/types/document-collection.enum.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -46,6 +48,11 @@ export class OfferController extends BaseController {
     const offerExistsMiddleware = new DocumentExistsMiddleware(
       this.offerService,
       'offer',
+      'offerId',
+    );
+    const documentOwnerMiddleware = new DocumentOwnerMiddleware(
+      this.offerService,
+      DocumentCollection.Offers,
       'offerId',
     );
 
@@ -95,6 +102,7 @@ export class OfferController extends BaseController {
         validateOfferIdMiddleware,
         new ValidateDtoMiddleware(UpdateOfferDto, updateOfferDtoSchema),
         offerExistsMiddleware,
+        documentOwnerMiddleware,
       ],
     });
     this.addRoute({
@@ -105,6 +113,7 @@ export class OfferController extends BaseController {
         privateRouteMiddleware,
         validateOfferIdMiddleware,
         offerExistsMiddleware,
+        documentOwnerMiddleware,
         new UploadMultipleFilesMiddleware(
           this.config.get('UPLOAD_DIR'),
           'images',
@@ -119,6 +128,7 @@ export class OfferController extends BaseController {
         privateRouteMiddleware,
         validateOfferIdMiddleware,
         offerExistsMiddleware,
+        documentOwnerMiddleware,
         new UploadFileMiddleware(this.config.get('UPLOAD_DIR'), 'previewUrl'),
       ],
     });
@@ -130,6 +140,7 @@ export class OfferController extends BaseController {
         privateRouteMiddleware,
         validateOfferIdMiddleware,
         offerExistsMiddleware,
+        documentOwnerMiddleware,
       ],
     });
   }
