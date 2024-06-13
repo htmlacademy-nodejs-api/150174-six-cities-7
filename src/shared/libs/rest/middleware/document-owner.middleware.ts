@@ -22,7 +22,6 @@ class DocumentOwnerMiddleware implements Middleware {
     const documentId = req[this.target][this.paramName];
     const userId = req.tokenPayload.id;
     const isOwner = await this.service.isOwner(documentId, userId);
-    console.log('isOwner', isOwner, documentId, userId);
     if (!isOwner) {
       throw new HttpError(
         StatusCodes.FORBIDDEN,

@@ -23,6 +23,7 @@ const configureApp = async () => {
   const userService = new DefaultUserService(logger, UserModel);
   const offerService = new DefaultOfferService(logger, OfferModel);
   const authService = new DefaultAuthService(logger, userService, config);
+  const commentService = new DefaultCommentService(logger, CommentModel);
   const userController = new UserController(
     logger,
     config,
@@ -35,8 +36,8 @@ const configureApp = async () => {
     config,
     offerService,
     userService,
+    commentService,
   );
-  const commentService = new DefaultCommentService(logger, CommentModel);
   const commentController = new CommentController(
     logger,
     commentService,
