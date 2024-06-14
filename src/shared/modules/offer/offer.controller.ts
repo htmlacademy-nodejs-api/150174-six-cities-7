@@ -30,6 +30,9 @@ import { UploadFileMiddleware } from '../../libs/rest/middleware/upload-file.mid
 import { Config, ConfigSchema } from '../../libs/index.js';
 import { UploadMultipleFilesMiddleware } from '../../libs/rest/middleware/upload-multiple-files.middleware.js';
 import { UserService } from '../user/user-service.interface.js';
+import { DocumentOwnerMiddleware } from '../../libs/rest/middleware/document-owner.middleware.js';
+import { DocumentCollection } from '../../libs/rest/types/document-collection.enum.js';
+import { CommentService } from '../comment/comment-service.interface.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -38,6 +41,8 @@ export class OfferController extends BaseController {
     @inject(Component.Config) protected readonly config: Config<ConfigSchema>,
     @inject(Component.OfferService) private readonly offerService: OfferService,
     @inject(Component.UserService) private readonly userService: UserService,
+    @inject(Component.CommentService)
+    private readonly commentService: CommentService,
   ) {
     super(logger);
     this.logger.info('Register routes for OfferController…');
@@ -46,6 +51,11 @@ export class OfferController extends BaseController {
     const offerExistsMiddleware = new DocumentExistsMiddleware(
       this.offerService,
       'offer',
+      'offerId',
+    );
+    const documentOwnerMiddleware = new DocumentOwnerMiddleware(
+      this.offerService,
+      DocumentCollection.Offers,
       'offerId',
     );
 
@@ -95,6 +105,7 @@ export class OfferController extends BaseController {
         validateOfferIdMiddleware,
         new ValidateDtoMiddleware(UpdateOfferDto, updateOfferDtoSchema),
         offerExistsMiddleware,
+        documentOwnerMiddleware,
       ],
     });
     this.addRoute({
@@ -105,6 +116,7 @@ export class OfferController extends BaseController {
         privateRouteMiddleware,
         validateOfferIdMiddleware,
         offerExistsMiddleware,
+        documentOwnerMiddleware,
         new UploadMultipleFilesMiddleware(
           this.config.get('UPLOAD_DIR'),
           'images',
@@ -119,6 +131,7 @@ export class OfferController extends BaseController {
         privateRouteMiddleware,
         validateOfferIdMiddleware,
         offerExistsMiddleware,
+        documentOwnerMiddleware,
         new UploadFileMiddleware(this.config.get('UPLOAD_DIR'), 'previewUrl'),
       ],
     });
@@ -130,6 +143,7 @@ export class OfferController extends BaseController {
         privateRouteMiddleware,
         validateOfferIdMiddleware,
         offerExistsMiddleware,
+        documentOwnerMiddleware,
       ],
     });
   }
@@ -201,7 +215,10 @@ export class OfferController extends BaseController {
     res: Response,
   ): Promise<void> {
     const { offerId } = params;
-    await this.offerService.deleteById(offerId);
+    await Promise.all([
+      this.offerService.deleteById(offerId),
+      this.commentService.deleteByOfferId(offerId),
+    ]);
 
     this.noContent(res);
   }

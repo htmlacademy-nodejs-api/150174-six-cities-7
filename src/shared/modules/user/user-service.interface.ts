@@ -5,8 +5,9 @@ import type { CreateUserDto } from './dto/create-user.dto.js';
 import { DocumentExists } from '../../models/document-exists.interface.js';
 import { OfferEntity } from '../offer/offer.entity.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
+import { DocumentOwner } from '../../models/document-owner.interface.js';
 
-export interface UserService extends DocumentExists {
+export interface UserService extends DocumentExists, DocumentOwner {
   create(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>>;
   updateById(
     id: string,

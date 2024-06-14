@@ -34,6 +34,8 @@ import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
 import { UploadUserAvatarRdo } from './rdo/upload-user-avatar.rdo.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
 import { OfferRdo } from '../offer/rdo/offer.rdo.js';
+import { DocumentOwnerMiddleware } from '../../libs/rest/middleware/document-owner.middleware.js';
+import { DocumentCollection } from '../../libs/rest/types/document-collection.enum.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -91,6 +93,7 @@ export class UserController extends BaseController {
       middlewares: [
         new ValidateObjectIdMiddleware('userId'),
         new DocumentExistsMiddleware(this.userService, 'user', 'userId'),
+        new DocumentOwnerMiddleware(this.userService, DocumentCollection.Users, 'userId'),
         new UploadFileMiddleware(this.config.get('UPLOAD_DIR'), 'avatar'),
       ],
     });
